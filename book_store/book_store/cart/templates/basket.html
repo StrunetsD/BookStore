@@ -7,13 +7,15 @@
     <ul>
         {% for item in basket_items %}
             <li>
-                <strong>{{ item.book.title }}</strong> by {{ item.author.name }} - 
+                <strong>{{ item.book.title }}</strong> by {{ item.book.author_name.name }} - 
                 Price: ${{ item.book.price }} 
               
+                <form method="post" action="{% url 'update_cart' item.id %}">
                     {% csrf_token %}
                     <input type="number" name="quantity" value="{{ item.quantity }}" min="1">
                     <button type="submit">Update</button>
                 </form>
+                
                 <form method="post" action="{% url 'delete_from_basket' item.id %}">
                     {% csrf_token %}
                     <button type="submit">Remove</button>
@@ -22,7 +24,7 @@
         {% endfor %}
     </ul>
     <p><strong>Total Cost:</strong> ${{ total_cost }}</p>
-else:
+{% else %}
     <p>Your basket is empty.</p>
 {% endif %}
 {% endblock %}

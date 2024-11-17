@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect,get_object_or_404
+from django.shortcuts import render,redirect,get_object_or_404, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from .models import *
 
@@ -14,7 +14,7 @@ def add_to_basket(request, book_id):
         basket_item.quantity += 1
 
     basket_item.save()
-    return redirect('index')  
+    return redirect('index')
 
 @login_required
 def delete_from_basket(request,basket_id):
@@ -32,3 +32,13 @@ def basket(request):
         'total_cost':   cost,
     }
     return render(request, 'basket.html', context)
+
+@login_required
+def update_cart(request,basket_item_id):
+    basket_item = get_object_or_404(Basket,id = basket_item_id,user=request.user)
+    if request.method =='POST':
+        quantity = request.POST['quantity']
+        if quantity.isdigit() and int(quantity)>0:
+            basket_item.quantity = quantity
+            basket_item.save()
+        return redirect('basket')
