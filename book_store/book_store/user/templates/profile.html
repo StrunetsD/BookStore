@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<body>
+
+    <header>
+        <h1>Welcome, {{ user.username }}!</h1>
+        <nav>
+            <a href="{% url 'index' %}">Home</a>
+            <a href="{% url 'logout' %}">Logout</a>
+        </nav>
+    </header>
+
+    <!-- Profile Information Section -->
+    <section class="profile-info">
+        <h2>Profile Information</h2>
+        <p><strong>Login:</strong> {{ user.username }}</p>
+    </section>
+
+    <section class="favorites">
+        <h2>Favorite Books</h2>
+        {% if favorite_books %}
+            <ul class="list-unstyled">
+                {% for book in favorite_books %}
+                    <li class="media mb-4">
+                        {% if book.image %}
+                            <img src="{{ book.image.url }}" class="mr-3" alt="{{ book.title }}" style="width: 100px; height: auto;">
+                        {% else %}
+                            <img src="{% static 'images/default-book.jpeg' %}" class="mr-3" alt="No Image" style="width: 100px; height: auto;">
+                        {% endif %}
+                        <div class="media-body">
+                            <h5 class="mt-0 mb-1">{{ book.title }}</h5>
+                            <p>by 
+                                {% for author in book.authors.all %}
+                                    {{ author.name }}{% if not forloop.last %}, {% endif %}
+                                {% endfor %}
+                            </p>
+                            <p><strong>Price:</strong> ${{ book.price }}</p>
+                            <form method="post" action="{% url 'delete_from_favorite_books' book.pk %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-sm">Remove from Favorites</button>
+                            </form>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>You haven't added any favorite books yet.</p>
+        {% endif %}
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Bookstore. All rights reserved.</p>
+    </footer>
+
+</body>
+{% endblock %}

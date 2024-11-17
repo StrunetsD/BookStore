@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<h2>Your Basket</h2>
+{% if basket_items %}
+    <ul>
+        {% for item in basket_items %}
+            <li>
+                <strong>{{ item.book.title }}</strong> by {{ item.author.name }} - 
+                Price: ${{ item.book.price }} 
+              
+                    {% csrf_token %}
+                    <input type="number" name="quantity" value="{{ item.quantity }}" min="1">
+                    <button type="submit">Update</button>
+                </form>
+                <form method="post" action="{% url 'delete_from_basket' item.id %}">
+                    {% csrf_token %}
+                    <button type="submit">Remove</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+    <p><strong>Total Cost:</strong> ${{ total_cost }}</p>
+else:
+    <p>Your basket is empty.</p>
+{% endif %}
+{% endblock %}
