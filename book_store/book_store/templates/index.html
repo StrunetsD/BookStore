@@ -5,10 +5,9 @@
 <hr>
 <h2>Книги</h2>
 
-<!-- Кнопка для перехода в профиль -->
 <div class="mb-3">
     <a href="{% url 'profile' %}" class="btn btn-secondary">Профиль</a>
-    <a href="{% url 'basket' %}" class="btn btn-warning">Корзина</a>  <!-- Ссылка на корзину -->
+    <a href="{% url 'basket' %}" class="btn btn-warning">Корзина</a>  
 </div>
 
 <div class="row">
@@ -18,12 +17,12 @@
                 {% if book.image %}
                     <img src="{{ book.image.url }}" class="card-img-top" alt="{{ book.title }}">
                 {% else %}
-                    <img src="{% static 'images/default-book.jpeg' %}" class="card-img-top" alt="No Image">
+                    <img src="{% static 'images/default-book.jpeg' %}" class="card-img-top" alt="Нет изображения">
                 {% endif %}
                 <div class="card-body">
                     <h5 class="card-title">{{ book.title }}</h5>
                     <p class="card-text">{{ book.description|truncatewords:20 }}</p>
-                    <p><strong>Цена:</strong> {{ book.price }} ₽</p>
+                    <p><strong>Цена:</strong> {{ book.price }} $</p>
                     
                     <form method="post" action="{% url 'add_to_basket' book.id %}">
                         {% csrf_token %}
