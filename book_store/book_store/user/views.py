@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from .forms import UserRegistrationForm
 from user.models import User
-from django.http import HttpResponseForbidden
+
 
 class UpdateProfileView(View):
     def get(self, request, pk):
